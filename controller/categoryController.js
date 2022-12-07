@@ -30,19 +30,34 @@ const saveData = async (req, res) => {
 }
 const GetAllRecords = async (req, res) => {
   try {
-    const resp = await Category.findAll({
-      where: {
-        id: req.body.id
-      },
-      include: [
-        {
-          model: Mobiles
+    let resp
+    if (req.body.id) {
+      resp = await Category.findAll({
+        where: {
+          id: req.body.id
         },
-        {
-          model: Electronics
-        }
-      ]
-    })
+
+        include: [
+          {
+            model: Mobiles
+          },
+          {
+            model: Electronics
+          }
+        ]
+      })
+    } else {
+      resp = await Category.findAll({
+        include: [
+          {
+            model: Mobiles
+          },
+          {
+            model: Electronics
+          }
+        ]
+      })
+    }
     res.status(202).json({
       response: resp,
       message: 'success'
